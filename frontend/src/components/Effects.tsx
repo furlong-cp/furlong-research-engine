@@ -6,7 +6,7 @@ import React, {
 } from "react";
 
 type WrapperProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 };
 
@@ -134,15 +134,34 @@ export function Tilt({
 ========================================= */
 
 export function FlipCard({
-  children,
-  className = "",
-}: WrapperProps) {
-  return (
-    <div className={`flip-card ${className}`.trim()}>
-      {children}
-    </div>
-  );
+children,
+front,
+back,
+className = "",
+}: WrapperProps & {
+front?: React.ReactNode;
+back?: React.ReactNode;
+}) {
+const [flipped, setFlipped] = useState(false);
+
+if (front !== undefined || back !== undefined) {
+return (
+<button
+type="button"
+className={`flip-card ${className} ${flipped ? "is-flipped" : ""}`.trim()}
+onClick={() => setFlipped((value) => !value)}
+> <span className="flip-card-front">
+{front} </span> <span className="flip-card-back">
+{back} </span> </button>
+);
 }
+
+return (
+<div className={`flip-card ${className}`.trim()}>
+{children} </div>
+);
+}
+
 
 /* =========================================
    FLIP WORDS
