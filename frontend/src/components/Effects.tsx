@@ -150,6 +150,8 @@ return (
 type="button"
 className={`flip-card ${className} ${flipped ? "is-flipped" : ""}`.trim()}
 onClick={() => setFlipped((value) => !value)}
+onMouseEnter={() => setFlipped(true)}
+onMouseLeave={() => setFlipped(false)}
 > <span className="flip-card-front">
 {front} </span> <span className="flip-card-back">
 {back} </span> </button>

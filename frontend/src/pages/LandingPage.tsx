@@ -423,7 +423,31 @@ export default function LandingPage() {
             {MODULES.map((m, i) => (
               <Reveal key={m.title} delay={i * 150}>
                 <FlipCard
-                  front={<><h3 className="card-title">{m.title}</h3><p className="muted">Hover or tap to flip →</p></>}
+                  
+front={
+  <>
+    <img
+      src={
+        m.title === "Market Replay"
+          ? "https://images.unsplash.com/photo-1642790106117-e829e14a795f?auto=format&fit=crop&w=800&q=80"
+          : m.title === "Execution Simulation"
+          ? "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80"
+          : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+      }
+      alt={m.title}
+      style={{
+        width: "100%",
+        height: "140px",
+        objectFit: "cover",
+        borderRadius: "8px",
+        marginBottom: "18px",
+        display: "block",
+      }}
+    />
+    <h3 className="card-title">{m.title}</h3>
+    <p className="muted">Hover to explore ↗</p>
+  </>
+}
                   back={<><h3 className="card-title">{m.title}</h3><p>{m.text}</p></>}
                 />
               </Reveal>
