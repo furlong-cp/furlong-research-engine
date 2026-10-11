@@ -2,7 +2,8 @@ name: Deploy Furlong Research Engine
 
 on:
 push:
-branches: [main]
+branches:
+- main
 workflow_dispatch:
 
 permissions:
@@ -16,10 +17,10 @@ cancel-in-progress: true
 
 jobs:
 deploy:
+runs-on: ubuntu-latest
 environment:
 name: github-pages
 url: ${{ steps.deployment.outputs.page_url }}
-runs-on: ubuntu-latest
 
 ```
 steps:
