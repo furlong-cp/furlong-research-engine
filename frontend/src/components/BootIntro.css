@@ -1,0 +1,741 @@
+
+.puzzle-intro {
+    background-color: #050b18;
+  --puzzle-green: #8dbbff;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #050b18;
+  color: #f1f5ed;
+  font-family: Inter, Arial, sans-serif;
+  opacity: 1;
+  transition:
+    opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.puzzle-intro--exit {
+  opacity: 0;
+  transform: scale(1.035);
+  pointer-events: none;
+}
+
+.puzzle-intro__grid {
+  position: absolute;
+  inset: -10%;
+  background-image:
+    linear-gradient(rgba(183, 255, 112, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(183, 255, 112, 0.035) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: radial-gradient(ellipse, black 0%, transparent 75%);
+  animation: puzzle-grid-drift 30s linear infinite;
+}
+
+.puzzle-intro__glow {
+  position: absolute;
+  width: min(65vw, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(156, 255, 87, 0.105) 0%,
+    rgba(156, 255, 87, 0.035) 38%,
+    transparent 70%
+  );
+  filter: blur(24px);
+  animation: puzzle-glow-breathe 5s ease-in-out infinite alternate;
+}
+
+.puzzle-intro__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(680px, calc(100% - 36px));
+  padding: 30px 0;
+}
+
+
+.puzzle-mark {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  display: grid;
+  place-items: center;
+  perspective: 1000px;
+  perspective-origin: 50% 42%;
+  transform: scale(0.82);
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.puzzle-mark.is-assembled {
+  transform: scale(1);
+}
+
+.puzzle-mark__pieces {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 5px;
+  padding: 30px;
+  transform-style: preserve-3d;
+  transform: rotateX(18deg) rotateY(-24deg) rotateZ(-5deg);
+  transition: transform 1.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.puzzle-mark.is-assembled .puzzle-mark__pieces {
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+}
+
+.puzzle-piece {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(183, 255, 112, 0.58);
+  border-radius: 9px;
+  background: linear-gradient(
+    145deg,
+    rgba(183, 255, 112, 0.19),
+    rgba(183, 255, 112, 0.025)
+  );
+  box-shadow:
+    inset 0 0 20px rgba(183, 255, 112, 0.035),
+    0 0 14px rgba(183, 255, 112, 0.025);
+  opacity: 0;
+  transform:
+    translate3d(var(--piece-x), var(--piece-y), -260px)
+    rotateX(55deg)
+    rotateY(45deg)
+    rotateZ(18deg)
+    scale(0.45);
+  transition:
+    transform 1500ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 650ms ease,
+    border-color 700ms ease,
+    background 700ms ease;
+  transition-delay: var(--piece-delay);
+  backface-visibility: hidden;
+}
+
+.puzzle-mark.is-assembled .puzzle-piece {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0) scale(1);
+  border-color: rgba(183, 255, 112, 0.32);
+  background: linear-gradient(
+    145deg,
+    rgba(183, 255, 112, 0.12),
+    rgba(183, 255, 112, 0.025)
+  );
+}
+
+.puzzle-mark.is-assembled {
+  transform: scale(1);
+}
+
+.puzzle-mark__pieces {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 5px;
+  padding: 30px;
+}
+
+.puzzle-piece {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(183, 255, 112, 0.58);
+  border-radius: 9px;
+  background: linear-gradient(
+    145deg,
+    rgba(183, 255, 112, 0.19),
+    rgba(183, 255, 112, 0.025)
+  );
+  box-shadow:
+    inset 0 0 20px rgba(183, 255, 112, 0.035),
+    0 0 14px rgba(183, 255, 112, 0.025);
+  opacity: 0;
+  transform:
+    translate(var(--piece-x), var(--piece-y))
+    rotate(12deg)
+    scale(0.72);
+  transition:
+    transform 1250ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 500ms ease,
+    border-color 700ms ease,
+    background 700ms ease;
+  transition-delay: var(--piece-delay);
+}
+
+.puzzle-piece span {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--puzzle-green);
+  box-shadow: 0 0 15px rgba(183, 255, 112, 0.7);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 500ms ease;
+  transition-delay: calc(var(--piece-delay) + 450ms);
+}
+
+.puzzle-mark.is-assembled .puzzle-piece {
+  opacity: 1;
+  transform: translate(0, 0) rotate(0) scale(1);
+  border-color: rgba(183, 255, 112, 0.32);
+  background: linear-gradient(
+    145deg,
+    rgba(183, 255, 112, 0.12),
+    rgba(183, 255, 112, 0.025)
+  );
+}
+
+.puzzle-mark.is-assembled .puzzle-piece span {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.puzzle-mark__center {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 1px solid rgba(183, 255, 112, 0.8);
+  border-radius: 20px;
+  background: #101c32;
+  color: var(--puzzle-green);
+  font-size: 43px;
+  font-weight: 800;
+  letter-spacing: -4px;
+  box-shadow:
+    0 0 45px rgba(183, 255, 112, 0.13),
+    inset 0 0 24px rgba(183, 255, 112, 0.07);
+  opacity: 0;
+  transform: scale(0.7) rotate(-12deg);
+  transition:
+    opacity 650ms ease,
+    transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 850ms;
+}
+
+.puzzle-mark.is-assembled .puzzle-mark__center {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+
+.puzzle-intro__wordmark {
+  margin-top: 0;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(5px);
+  transition:
+    opacity 1000ms ease,
+    transform 1000ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1000ms ease;
+}
+
+.puzzle-intro__wordmark.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.puzzle-intro__overline {
+  color: #899bb8;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+
+.puzzle-intro__wordmark h1 {
+  margin: 15px 0 8px;
+  font-size: clamp(42px, 8vw, 66px);
+  font-weight: 800;
+  letter-spacing: -3.5px;
+}
+
+.puzzle-intro__wordmark h1 span {
+  color: var(--puzzle-green);
+}
+
+.puzzle-intro__wordmark p {
+  margin: 0;
+  color: #899bb8;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+}
+
+.puzzle-intro__bottom {
+  width: min(390px, 100%);
+  margin-top: 48px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 800ms ease,
+    transform 800ms ease;
+}
+
+.puzzle-intro__bottom.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.puzzle-intro__progress {
+  height: 2px;
+  overflow: hidden;
+  background: rgba(183, 255, 112, 0.13);
+}
+
+.puzzle-intro__progress div {
+  width: 0;
+  height: 100%;
+  background: var(--puzzle-green);
+  box-shadow: 0 0 12px rgba(183, 255, 112, 0.8);
+  animation: puzzle-progress 4.8s 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.puzzle-intro__caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  color: #526582;
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+@keyframes puzzle-progress {
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes puzzle-grid-drift {
+  to {
+    background-position: 54px 54px;
+  }
+}
+
+@keyframes puzzle-glow-breathe {
+  from {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 480px) {
+  .puzzle-mark {
+    width: 230px;
+    height: 230px;
+  }
+
+  .puzzle-mark__pieces {
+    padding: 22px;
+    gap: 4px;
+  }
+
+  .puzzle-mark__center {
+    width: 64px;
+    height: 64px;
+    font-size: 36px;
+  }
+
+  .puzzle-intro__wordmark h1 {
+    letter-spacing: -2px;
+  }
+
+  .puzzle-intro__overline {
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  .puzzle-intro__bottom {
+    margin-top: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puzzle-intro,
+  .puzzle-mark,
+  .puzzle-piece,
+  .puzzle-piece span,
+  .puzzle-mark__center,
+  .puzzle-intro__wordmark,
+  .puzzle-intro__bottom {
+    transition-duration: 0.01ms !important;
+  }
+
+  .puzzle-intro__grid,
+  .puzzle-intro__glow,
+  .puzzle-intro__progress div {
+    animation: none;
+  }
+
+  .puzzle-intro__progress div {
+    width: 100%;
+  }
+}
+
+
+/* Full-screen cinematic research HUD */
+
+.puzzle-intro::before {
+  content: "";
+  position: absolute;
+  inset: 26px;
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    linear-gradient(#8dbbff, #8dbbff) left top / 34px 1px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) left top / 1px 34px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) right top / 34px 1px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) right top / 1px 34px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) left bottom / 34px 1px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) left bottom / 1px 34px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) right bottom / 34px 1px no-repeat,
+    linear-gradient(#8dbbff, #8dbbff) right bottom / 1px 34px no-repeat;
+}
+
+.puzzle-intro::after {
+  content: "FURLONG RESEARCH     /     MATH • DATA • STRATEGY";
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 60px);
+  color: rgba(183, 255, 112, 0.42);
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.puzzle-intro__grid {
+  background-size: 54px 54px, 54px 54px;
+  animation: puzzle-grid-drift 30s linear infinite;
+}
+
+.puzzle-intro__content {
+  z-index: 2;
+}
+
+.puzzle-intro__glow {
+  width: min(75vw, 760px);
+  opacity: 0.8;
+}
+
+/* Soft orbital rings around the assembling mark */
+.puzzle-mark::before,
+.puzzle-mark::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px solid rgba(183, 255, 112, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: rotateX(64deg) rotateZ(-20deg);
+  animation: puzzle-orbit 12s linear infinite;
+}
+
+.puzzle-mark::after {
+  inset: 3%;
+  border-color: rgba(183, 255, 112, 0.07);
+  transform: rotateX(64deg) rotateZ(35deg);
+  animation-duration: 18s;
+  animation-direction: reverse;
+}
+
+@keyframes puzzle-orbit {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Fine edge details */
+@media (min-width: 700px) {
+  .puzzle-intro {
+    background-image:
+      radial-gradient(circle at 8% 28%, rgba(183, 255, 112, 0.45) 0 1px, transparent 2px),
+      radial-gradient(circle at 91% 65%, rgba(183, 255, 112, 0.45) 0 1px, transparent 2px),
+      radial-gradient(circle at 15% 78%, rgba(183, 255, 112, 0.25) 0 1px, transparent 2px),
+      radial-gradient(circle at 84% 19%, rgba(183, 255, 112, 0.25) 0 1px, transparent 2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .puzzle-intro::before {
+    inset: 12px;
+  }
+
+  .puzzle-intro::after {
+    bottom: 18px;
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+  .puzzle-mark {
+    perspective: 700px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puzzle-mark::before,
+  .puzzle-mark::after {
+    animation: none;
+  }
+}
+
+/* Cinematic navy-blue research atmosphere */
+.puzzle-intro {
+  background-color: #050b18;
+  background-image:
+    radial-gradient(ellipse at 50% 42%, rgba(39, 76, 132, 0.24), transparent 58%),
+    linear-gradient(135deg, #050b18 0%, #0a1427 52%, #030711 100%);
+}
+
+/* Lightning flashes behind the assembling mark */
+.puzzle-intro__glow {
+  width: min(90vw, 900px);
+  background:
+    radial-gradient(ellipse, rgba(86, 145, 255, 0.16), transparent 65%);
+  filter: blur(35px);
+  animation: navy-storm-glow 5s ease-in-out infinite;
+}
+
+.puzzle-intro__grid {
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(116, 163, 230, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 163, 230, 0.055) 1px, transparent 1px);
+}
+
+/* Brief, irregular lightning flashes */
+.puzzle-intro__content {
+  animation: storm-content-enter 900ms ease both;
+}
+
+.puzzle-intro::marker {
+  display: none;
+}
+
+.puzzle-intro__glow::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  opacity: 0;
+  background:
+    linear-gradient(112deg, transparent 46%, rgba(168, 203, 255, 0.0) 48%,
+    rgba(190, 219, 255, 0.85) 49%, rgba(122, 173, 255, 0.0) 50%,
+    transparent 53%),
+    linear-gradient(72deg, transparent 48%, rgba(175, 210, 255, 0.0) 49%,
+    rgba(190, 219, 255, 0.55) 49.5%, transparent 50.5%);
+  filter: blur(1px);
+  animation: lightning-flash 7s linear infinite;
+  pointer-events: none;
+}
+
+/* Red ink stamp */
+.puzzle-intro__wordmark {
+  position: relative;
+}
+
+
+
+/* Oversized, distressed red rubber stamp */
+.puzzle-intro__wordmark::after {
+  content: "WELCOME TO THE WORLD OF QUANT";
+  position: absolute;
+  left: calc(100% + 55px);
+  top: 50%;
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(390px, 43vw, 680px);
+  min-height: 190px;
+  box-sizing: border-box;
+  padding: 30px 34px;
+
+  border: 8px double rgba(170, 25, 34, 0.88);
+  outline: 2px solid rgba(170, 25, 34, 0.5);
+  outline-offset: 7px;
+  border-radius: 3px;
+
+  color: #b51f2b;
+  font-family: "Courier New", monospace;
+  font-size: clamp(30px, 3.5vw, 55px);
+  font-weight: 1000;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  text-align: center;
+  text-transform: uppercase;
+
+  background:
+    repeating-linear-gradient(
+      4deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(150, 15, 24, 0.045) 4px,
+      transparent 6px
+    );
+
+  -webkit-text-stroke: 1.2px rgba(158, 19, 29, 0.45);
+  text-shadow: 1px 0 rgba(155, 15, 24, 0.35);
+
+  /* Ink gaps and uneven pressure */
+  -webkit-mask-image:
+    repeating-linear-gradient(
+      173deg,
+      #000 0px,
+      #000 5px,
+      rgba(0, 0, 0, 0.58) 6px,
+      #000 8px,
+      #000 17px,
+      rgba(0, 0, 0, 0.72) 18px,
+      #000 21px
+    );
+  mask-image:
+    repeating-linear-gradient(
+      173deg,
+      #000 0px,
+      #000 5px,
+      rgba(0, 0, 0, 0.58) 6px,
+      #000 8px,
+      #000 17px,
+      rgba(0, 0, 0, 0.72) 18px,
+      #000 21px
+    );
+
+  box-shadow:
+    inset 0 0 0 2px rgba(170, 25, 34, 0.12),
+    2px 2px 0 rgba(170, 25, 34, 0.12);
+
+  opacity: 0;
+  transform: translateY(-50%) rotate(-15deg) scale(1.45);
+  transform-origin: center;
+  transition:
+    opacity 450ms ease,
+    transform 650ms cubic-bezier(0.18, 0.89, 0.32, 1.15);
+}
+
+.puzzle-intro__wordmark.is-visible::after {
+  opacity: 0.92;
+  transform: translateY(-50%) rotate(-15deg) scale(1);
+  transition-delay: 450ms;
+}
+
+/* Keep the large stamp inside smaller screens */
+@media (max-width: 1000px) {
+  .puzzle-intro__wordmark::after {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: min(88vw, 540px);
+    min-height: 130px;
+    margin: 34px auto 0;
+    padding: 22px;
+    border-width: 6px;
+    font-size: clamp(23px, 5vw, 38px);
+    transform: rotate(-9deg) scale(1.25);
+  }
+
+  .puzzle-intro__wordmark.is-visible::after {
+    transform: rotate(-9deg) scale(1);
+  }
+}
+/* Sharper, more restrained puzzle pieces */
+.puzzle-piece {
+  border-color: rgba(141, 187, 255, 0.45);
+  background: linear-gradient(
+    145deg,
+    rgba(93, 145, 220, 0.15),
+    rgba(30, 57, 100, 0.045)
+  );
+  box-shadow: inset 0 0 20px rgba(110, 165, 255, 0.025);
+}
+
+.puzzle-mark.is-assembled .puzzle-piece {
+  border-color: rgba(141, 187, 255, 0.3);
+  background: linear-gradient(
+    145deg,
+    rgba(93, 145, 220, 0.11),
+    rgba(30, 57, 100, 0.035)
+  );
+}
+
+@keyframes navy-storm-glow {
+  0%, 100% { opacity: 0.55; transform: scale(0.94); }
+  42% { opacity: 0.9; transform: scale(1.04); }
+  44% { opacity: 0.45; }
+  46% { opacity: 1; }
+  49% { opacity: 0.6; }
+  72% { opacity: 0.8; transform: scale(1.08); }
+}
+
+@keyframes lightning-flash {
+  0%, 27%, 29%, 67%, 69%, 100% { opacity: 0; }
+  27.5%, 28.2% { opacity: 0.8; }
+  28.7% { opacity: 0.12; }
+  68% { opacity: 0.65; }
+  68.5% { opacity: 0.08; }
+}
+
+@keyframes storm-content-enter {
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 480px) {
+  .puzzle-intro__wordmark::after {
+    padding: 9px 10px;
+    letter-spacing: 0.8px;
+    margin-top: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puzzle-intro__glow,
+  .puzzle-intro__glow::after,
+  .puzzle-intro__content {
+    animation: none;
+  }
+}
+
+
+@media (max-width: 1000px) {
+  .puzzle-intro__wordmark::after {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: min(310px, calc(100vw - 70px));
+    max-width: 100%;
+    margin: 28px auto 0;
+    font-size: clamp(12px, 3vw, 17px);
+    transform: rotate(-7deg) scale(1.2);
+  }
+
+  .puzzle-intro__wordmark.is-visible::after {
+    transform: rotate(-7deg) scale(1);
+  }
+}
