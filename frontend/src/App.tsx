@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css";
 import LandingPage from "./pages/LandingPage";
@@ -9,10 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import BootIntro from "./components/BootIntro";
 
 export default function App() {
-  const location = useLocation();
-  const [showIntro, setShowIntro] = useState(
-    location.pathname === "/"
-  );
+  const [showIntro, setShowIntro] = useState(true);
 
   return (
     <>
