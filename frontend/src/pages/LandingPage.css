@@ -1,0 +1,49 @@
+.hero {
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center;
+  padding: 5rem 0 4rem;
+}
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); margin-top: 1rem; }
+.lead { font-size: 1.1rem; max-width: 52ch; }
+.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+
+.section { padding: 3rem 0; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.card-title { margin-top: 0.8rem; font-size: 1.15rem; }
+
+/* Order book preview */
+.book-preview { padding: 1.25rem; }
+.book-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.depth { position: absolute; top: 2px; bottom: 2px; opacity: 0.18; border-radius: 3px; z-index: 0; }
+.depth-bid { right: 0; background: var(--bid); }
+.depth-ask { left: 0; background: var(--ask); }
+.table td { z-index: 1; }
+.spread { margin: 1rem 0 0.25rem; color: var(--text); text-align: center; }
+.event-line { text-align: center; font-size: 0.8rem; min-height: 1.4em; }
+.book-controls { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+.note { font-size: 0.8rem; text-align: center; margin: 1rem 0 0; }
+
+/* Architecture */
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+.flow-step { display: flex; align-items: center; gap: 0.5rem; }
+.flow-box { padding: 1rem 1.25rem; font-size: 0.9rem; }
+.flow-arrow { color: var(--accent); font-size: 1.4rem; }
+
+/* Status */
+.status-list { padding: 0.5rem 1.5rem; }
+.status-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.85rem 0; border-bottom: 1px solid var(--border);
+}
+.status-row:last-child { border-bottom: none; }
+
+.footer {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+  padding: 2rem 0; margin-top: 3rem; border-top: 1px solid var(--border); font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding-top: 3rem; }
+  .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}

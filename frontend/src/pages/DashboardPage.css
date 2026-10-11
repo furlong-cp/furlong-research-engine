@@ -1,0 +1,48 @@
+.dash { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.dash-side {
+  background: var(--panel); border-right: 1px solid var(--border);
+  padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem;
+}
+.side-nav { display: flex; flex-direction: column; gap: 0.25rem; }
+.side-item {
+  text-align: left; background: none; border: none; color: var(--muted);
+  padding: 0.55rem 0.75rem; border-radius: 8px; font: 500 0.9rem var(--sans); cursor: pointer;
+}
+.side-item:hover { background: var(--panel-2); color: var(--text); }
+.side-item.active { background: var(--accent-dim); color: var(--accent); }
+.side-status { margin-top: auto; font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-off { background: var(--ask); }
+
+.dash-main { padding: 1.5rem 2rem; min-width: 0; }
+.dash-title { font-size: 1.6rem; }
+.demo-banner {
+  display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+  padding: 0.7rem 1rem; margin-bottom: 1.25rem; font-size: 0.88rem; color: var(--muted);
+  border: 1px dashed var(--warn); border-radius: 10px;
+}
+
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
+.metric { display: flex; flex-direction: column; gap: 0.35rem; padding: 1rem 1.25rem; }
+.metric-label { font-size: 0.8rem; }
+.metric-value { font-size: 1.4rem; font-weight: 600; }
+.tiny { align-self: flex-start; font-size: 0.62rem; }
+
+.dash-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.dash-grid h3 { font-size: 1rem; }
+.book-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.controls { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.empty { border: 1px dashed var(--border); padding: 1rem; border-radius: 10px; margin: 0; }
+.log { list-style: none; margin: 0; padding: 0; font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.log .warn { color: var(--warn); }
+.log .info { color: var(--info); }
+
+@media (max-width: 900px) {
+  .dash { grid-template-columns: 1fr; }
+  .dash-side { flex-direction: row; align-items: center; flex-wrap: wrap; border-right: none; border-bottom: 1px solid var(--border); }
+  .side-nav { flex-direction: row; flex-wrap: wrap; }
+  .side-status { margin: 0; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-main { padding: 1rem; }
+}
