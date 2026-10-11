@@ -6,7 +6,7 @@ import "./styles/terminal.css";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/furlong-research-engine">
       <App />
     </BrowserRouter>
   </StrictMode>,
